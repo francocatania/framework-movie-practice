@@ -1,0 +1,30 @@
+.MovieList {
+ margin-top: 30px;
+ margin-left: 100px
+}
+
+.AddMovie {
+  margin-top: 30px;
+}
+
+.addMovieBar {
+  width: 200px;
+}
+
+.Search {
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+
+.searchBar {
+  width: 200px;
+}
+
+.Movie {
+  margin-top: 15px;
+}
+
+/*.movieImg {
+  height: 80px;
+  width: 50px;
+}*/
