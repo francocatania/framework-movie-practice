@@ -25,6 +25,7 @@ class MovieList extends React.Component {
     this.handleAddMovieInputChange = this.handleAddMovieInputChange.bind(this);
     this.handleMovieClick = this.handleMovieClick.bind(this);
     this.handleWatchedButton = this.handleWatchedButton.bind(this);
+    this.handleToWatchButton = this.handleToWatchButton.bind(this);
   }
 
   handleInputChange(event) {
@@ -63,13 +64,16 @@ class MovieList extends React.Component {
 
     
   handleWatchedButton() {
-    let watchedMovies = this.state.displayingMovies.filter((movie) => {
+    let watchedMovies = movies.filter((movie) => {
       return movie.watched;
     });
     
     this.setState({displayingMovies: watchedMovies});
-
   }
+
+  handleToWatchButton() {
+    this.setState({displayingMovies: movies});
+  } 
 
 
   render() {
@@ -78,8 +82,8 @@ class MovieList extends React.Component {
         <AddMovie clickHandler={this.handleClick} handleChange={this.handleAddMovieInputChange} inputValue={this.state.movieToAdd}/>
         
         <div className='searchDiv'>
-          <span> <button onClick={this.handleWatchedButton}> Watched </button> </span>
-          <span> <button> To Watch </button> </span>
+          <span> <button onClick={this.handleToWatchButton} > All Movies </button> </span>
+          <span> <button onClick={this.handleWatchedButton} > Watched </button> </span>
           <Search handleChange={this.handleInputChange}/>
         </div>
 
