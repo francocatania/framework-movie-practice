@@ -4,24 +4,21 @@ import movies from '../index.jsx'
 class Movie extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      watched: this.props.watched,
-    }
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick() {
-    this.setState({watched: !this.state.watched});
-    movies[this.props.index].watched = !movies[this.props.index].watched
 
+  handleClick() {
+    this.props.handleMovieClick(this.props.index);
   }
 
   render() {
     return (
-      <div className='Movie' onClick={this.handleClick.bind(this)} >
+      <div className='Movie' onClick={this.handleClick} >
         <span className='movieTitle' >
           {this.props.title}
         </span> 
-        {this.state.watched ? (
+        {this.props.watched ? (
           <span className='watched'> Watched </span>
           ) : (<span />)} 
       </div>
