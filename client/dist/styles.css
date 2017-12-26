@@ -11,7 +11,7 @@
   width: 200px;
 }
 
-.Search {
+.searchDiv {
   margin-top: 15px;
   margin-bottom: 30px;
 }
@@ -22,6 +22,10 @@
 
 .Movie {
   margin-top: 15px;
+}
+
+.watched {
+  color: lightgreen;
 }
 
 /*.movieImg {

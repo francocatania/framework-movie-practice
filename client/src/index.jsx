@@ -5,11 +5,11 @@ import AddMovie from './components/AddMovie.jsx';
 import Movie from './components/Movie.jsx';
 
 var movies = [
-  {title: 'Mean Girls'},
-  {title: 'Hackers'},
-  {title: 'The Grey'},
-  {title: 'Sunshine'},
-  {title: 'Ex Machina'},
+  {title: 'Mean Girls', watched: true},
+  {title: 'Hackers', watched: false},
+  {title: 'The Grey', watched: false},
+  {title: 'Sunshine', watched: false},
+  {title: 'Ex Machina', watched: true},
 ];
 
 class MovieList extends React.Component {
@@ -46,7 +46,7 @@ class MovieList extends React.Component {
         displayingMovies: movies,
         movieToAdd: ''
       });
-      
+
 
     } else {
       console.log('type something to enter');
@@ -58,10 +58,15 @@ class MovieList extends React.Component {
     return (
       <div className='MovieList'>
         <AddMovie clickHandler={this.handleClick} handleChange={this.handleAddMovieInputChange} inputValue={this.state.movieToAdd}/>
-        <Search handleChange={this.handleInputChange}/>
+        
+        <div className='searchDiv'>
+          <span> <button> Watched </button> </span>
+          <span> <button> To Watch </button> </span>
+          <Search handleChange={this.handleInputChange}/>
+        </div>
 
-        {this.state.displayingMovies.map((movie) => {
-          return <Movie title={movie.title} />
+        {this.state.displayingMovies.map((movie, index) => {
+          return <Movie title={movie.title} index={index} watched={movie.watched} />
         })}
 
       </div>
@@ -70,6 +75,8 @@ class MovieList extends React.Component {
 }
 
 ReactDOM.render( <MovieList />, document.getElementById('app'));
+
+export default movies;
 
 
 
