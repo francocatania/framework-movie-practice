@@ -43,7 +43,10 @@ class MovieList extends React.Component {
 
   handleClick(event) {
     if (this.state.movieToAdd !== '') {
-      let newMovie = {title: this.state.movieToAdd};
+      let newMovie = {
+        title: this.state.movieToAdd,
+        watched: false,
+      };
       movies.push(newMovie);
       this.setState({
         displayingMovies: movies,
@@ -58,13 +61,13 @@ class MovieList extends React.Component {
 
 
   handleMovieClick(index) {
-    movies[index].watched = !movies[index].watched;
-    this.setState({displayingMovies: movies});
+    this.state.displayingMovies[index].watched = !this.state.displayingMovies[index].watched
+    this.setState({displayingMovies: this.state.displayingMovies});
   }
 
     
   handleWatchedButton() {
-    let watchedMovies = movies.filter((movie) => {
+    let watchedMovies = this.state.displayingMovies.filter((movie) => {
       return movie.watched;
     });
     
