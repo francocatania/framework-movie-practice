@@ -17,14 +17,16 @@ class MovieList extends React.Component {
     super(props);
     this.state = {
       displayingMovies: movies,
-      // searchValue: ''
+      movieToAdd: '',
+      // searchValue: '',
     }
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleAddMovieInputChange = this.handleAddMovieInputChange.bind(this);
   }
 
   handleInputChange(event) {
     // this.setState({searchValue: event.target.value});
-
     let filteredMovies = movies.filter((movie) => {
       return movie.title.includes(event.target.value);
     });
@@ -32,10 +34,30 @@ class MovieList extends React.Component {
     this.setState({displayingMovies: filteredMovies});
   }
 
+  handleAddMovieInputChange(event) {
+    this.setState({movieToAdd: event.target.value})
+  }
+
+  handleClick(event) {
+    if (this.state.movieToAdd !== '') {
+      let newMovie = {title: this.state.movieToAdd};
+      movies.push(newMovie);
+      this.setState({
+        displayingMovies: movies,
+        movieToAdd: ''
+      });
+      
+
+    } else {
+      console.log('type something to enter');
+    }
+
+  }
+
   render() {
     return (
       <div className='MovieList'>
-        <AddMovie />
+        <AddMovie clickHandler={this.handleClick} handleChange={this.handleAddMovieInputChange} inputValue={this.state.movieToAdd}/>
         <Search handleChange={this.handleInputChange}/>
 
         {this.state.displayingMovies.map((movie) => {
