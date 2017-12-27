@@ -63,6 +63,7 @@ class MovieList extends React.Component {
       let newMovie = {
         title: this.state.movieToAdd,
         watched: false,
+        id: Math.random(0, 99999)
       };
 
       $.ajax({
