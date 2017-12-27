@@ -4,41 +4,58 @@ import Search from './components/Search.jsx';
 import AddMovie from './components/AddMovie.jsx';
 import Movie from './components/Movie.jsx';
 
-var movies = [
-  {title: 'Mean Girls', watched: true},
-  {title: 'Hackers', watched: false},
-  {title: 'The Grey', watched: false},
-  {title: 'Sunshine', watched: false},
-  {title: 'Ex Machina', watched: true},
-];
+import $ from 'jquery';
+const SERVER_URL = 'http://127.0.0.1:3000';
+const GET_MOVIES = '/movies';
+const ADD_MOVIE = '/movie';
+const TOGGLE_WATCHED = '/toggleWatched'
+
 
 class MovieList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      displayingMovies: movies,
+      allMovies: [],
+      displayingMovies: [],
       movieToAdd: '',
-      // searchValue: '',
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleAddMovieInputChange = this.handleAddMovieInputChange.bind(this);
     this.handleMovieClick = this.handleMovieClick.bind(this);
     this.handleWatchedButton = this.handleWatchedButton.bind(this);
-    this.handleToWatchButton = this.handleToWatchButton.bind(this);
+    this.handleToAllMoviesButton = this.handleToAllMoviesButton.bind(this);
+    this.handleSuccess = this.handleSuccess.bind(this);
   }
 
+
+  componentDidMount() {
+    $.get(SERVER_URL + GET_MOVIES, (data) => {
+      this.setState({allMovies: data});
+      this.setState({displayingMovies: data});
+    });
+  }
+
+
   handleInputChange(event) {
-    // this.setState({searchValue: event.target.value});
-    let filteredMovies = movies.filter((movie) => {
-      return movie.title.includes(event.target.value);
+    let filteredMovies = this.state.allMovies.filter((movie) => {
+      return this.state.allMovies.title.includes(event.target.value);
     });
 
     this.setState({displayingMovies: filteredMovies});
   }
 
+
   handleAddMovieInputChange(event) {
     this.setState({movieToAdd: event.target.value})
+  }
+
+
+  handleSuccess(data) {
+    this.setState({
+      allMovies: data,
+      displayingMovies: data,
+    });
   }
 
   handleClick(event) {
@@ -47,12 +64,17 @@ class MovieList extends React.Component {
         title: this.state.movieToAdd,
         watched: false,
       };
-      movies.push(newMovie);
-      this.setState({
-        displayingMovies: movies,
-        movieToAdd: ''
+
+      $.ajax({
+        type: "POST",
+        url: SERVER_URL + ADD_MOVIE,
+        data: JSON.stringify(newMovie),
+        success: this.handleSuccess,
       });
 
+      this.setState({
+        movieToAdd: ''
+      });
 
     } else {
       console.log('type something to enter');
@@ -60,8 +82,21 @@ class MovieList extends React.Component {
   }
 
 
-  handleMovieClick(index) {
+  handleMovieClick(index, id) {
     this.state.displayingMovies[index].watched = !this.state.displayingMovies[index].watched
+
+    let dataObj = {
+      id: id,
+      index: index,
+    }
+
+    $.ajax({
+        type: "PUT",
+        url: SERVER_URL + TOGGLE_WATCHED,
+        data: JSON.stringify(dataObj),
+        success: console.log,
+      });
+
     this.setState({displayingMovies: this.state.displayingMovies});
   }
 
@@ -74,8 +109,9 @@ class MovieList extends React.Component {
     this.setState({displayingMovies: watchedMovies});
   }
 
-  handleToWatchButton() {
-    this.setState({displayingMovies: movies});
+
+  handleToAllMoviesButton() {
+    this.setState({displayingMovies: this.state.allMovies});
   } 
 
 
@@ -85,13 +121,13 @@ class MovieList extends React.Component {
         <AddMovie clickHandler={this.handleClick} handleChange={this.handleAddMovieInputChange} inputValue={this.state.movieToAdd}/>
         
         <div className='searchDiv'>
-          <span> <button onClick={this.handleToWatchButton} > All Movies </button> </span>
+          <span> <button onClick={this.handleToAllMoviesButton} > All Movies </button> </span>
           <span> <button onClick={this.handleWatchedButton} > Watched </button> </span>
           <Search handleChange={this.handleInputChange}/>
         </div>
 
         {this.state.displayingMovies.map((movie, index) => {
-          return <Movie key={index} title={movie.title} index={index} watched={movie.watched} handleMovieClick={this.handleMovieClick} />
+          return <Movie key={movie.id} id={movie.id} title={movie.title} index={index} watched={movie.watched} handleMovieClick={this.handleMovieClick} />
         })}
 
       </div>
@@ -100,8 +136,6 @@ class MovieList extends React.Component {
 }
 
 ReactDOM.render( <MovieList />, document.getElementById('app'));
-
-export default movies;
 
 
 

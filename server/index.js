@@ -9,5 +9,45 @@ app.use(express.static(path.join(__dirname, '../client/dist')));
 app.listen(3000, function () { console.log('MovieList app listening on port 3000!') });
 
 
+var movies = [
+  {id: 0, title: 'Mean Girls', watched: true},
+  {id: 1, title: 'Hackers', watched: false},
+  {id: 2, title: 'The Grey', watched: false},
+  {id: 3, title: 'Sunshine', watched: false},
+  {id: 4, title: 'Ex Machina', watched: true},
+];
+
+
+app.get('/movies', (req, res) => {
+  res.send(movies);
+});
+
+
+app.post('/movie', (req, res) => {
+  let body = [];
+  req.on('data', (chunk) => {
+    body.push(chunk);
+  }).on('end', () => {
+    body = Buffer.concat(body).toString();
+    movies.push(JSON.parse(body))
+    res.send(movies);
+  });
+});
+
+
+app.put('/toggleWatched', (req, res) => {
+  let body = '';
+  req.on('data', (chunk) => {
+    body += chunk;
+  }).on('end', () => {
+    let movieId = JSON.parse(body).id;
+    for (var i = 0; i < movies.length; i++) {
+      if(movies[i].id === movieId) {
+        movies[i].watched = !movies[i].watched; 
+      }
+    }
+    res.send('Successful Put')
+  })
+})
 
 

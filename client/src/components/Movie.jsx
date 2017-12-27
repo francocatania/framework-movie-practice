@@ -1,5 +1,4 @@
 import React from 'react';
-import movies from '../index.jsx'
 
 class Movie extends React.Component {
   constructor(props) {
@@ -9,7 +8,7 @@ class Movie extends React.Component {
 
 
   handleClick() {
-    this.props.handleMovieClick(this.props.index);
+    this.props.handleMovieClick(this.props.index, this.props.id);
   }
 
   render() {
