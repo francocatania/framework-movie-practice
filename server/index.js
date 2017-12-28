@@ -33,7 +33,7 @@ app.post('/movie', (req, res) => {
     getFromTMDB(query, (movie, err) => {
       if(movie === null) {
         console.log('NO ESTA NABO', err);
-        res.send(404);
+        res.send(502);
       } else {
         movies.push(JSON.parse(movie));
         console.log(movies);
