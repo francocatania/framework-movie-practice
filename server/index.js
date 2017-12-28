@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
-
+const getFromTMDB = require('../lib/movieAPI.js');
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../client/dist')));
@@ -27,10 +27,14 @@ app.post('/movie', (req, res) => {
   let body = [];
   req.on('data', (chunk) => {
     body.push(chunk);
+
   }).on('end', () => {
-    body = Buffer.concat(body).toString();
-    movies.push(JSON.parse(body))
-    res.send(movies);
+    let query = body.toString();
+    getFromTMDB(query, (movie) => {
+      movies.push(JSON.parse(movie));
+      console.log(movies);
+      res.send(movies);
+    });
   });
 });
 

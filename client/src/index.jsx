@@ -3,12 +3,12 @@ import ReactDOM  from 'react-dom';
 import Search from './components/Search.jsx';
 import AddMovie from './components/AddMovie.jsx';
 import Movie from './components/Movie.jsx';
-
 import $ from 'jquery';
+
 const SERVER_URL = 'http://127.0.0.1:3000';
 const GET_MOVIES = '/movies';
 const ADD_MOVIE = '/movie';
-const TOGGLE_WATCHED = '/toggleWatched'
+const TOGGLE_WATCHED = '/toggleWatched';
 
 
 class MovieList extends React.Component {
@@ -52,6 +52,7 @@ class MovieList extends React.Component {
 
 
   handleSuccess(data) {
+    console.log('data', data);
     this.setState({
       allMovies: data,
       displayingMovies: data,
@@ -60,16 +61,17 @@ class MovieList extends React.Component {
 
   handleClick(event) {
     if (this.state.movieToAdd !== '') {
-      let newMovie = {
-        title: this.state.movieToAdd,
-        watched: false,
-        id: Math.random(0, 99999)
-      };
+      let movieToAdd = this.state.movieToAdd;
+      // let newMovie = {
+      //   title: this.state.movieToAdd,
+      //   watched: false,
+      //   id: Math.random(0, 99999)
+      // };
 
       $.ajax({
         type: "POST",
         url: SERVER_URL + ADD_MOVIE,
-        data: JSON.stringify(newMovie),
+        data: movieToAdd,
         success: this.handleSuccess,
       });
 
