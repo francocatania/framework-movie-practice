@@ -30,10 +30,15 @@ app.post('/movie', (req, res) => {
 
   }).on('end', () => {
     let query = body.toString();
-    getFromTMDB(query, (movie) => {
-      movies.push(JSON.parse(movie));
-      console.log(movies);
-      res.send(movies);
+    getFromTMDB(query, (movie, err) => {
+      if(movie === null) {
+        console.log('NO ESTA NABO', err);
+        res.send(404);
+      } else {
+        movies.push(JSON.parse(movie));
+        console.log(movies);
+        res.send(movies);
+      }
     });
   });
 });

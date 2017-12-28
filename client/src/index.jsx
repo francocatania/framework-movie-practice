@@ -59,6 +59,10 @@ class MovieList extends React.Component {
     });
   }
 
+  handleMovieNotfound() {
+    alert('Sorry, we couldn\'t find your movie.. Bummer!');
+  }
+
   handleClick(event) {
     if (this.state.movieToAdd !== '') {
       let movieToAdd = this.state.movieToAdd;
@@ -73,6 +77,7 @@ class MovieList extends React.Component {
         url: SERVER_URL + ADD_MOVIE,
         data: movieToAdd,
         success: this.handleSuccess,
+        error: this.handleMovieNotfound,
       });
 
       this.setState({
