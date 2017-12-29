@@ -19,10 +19,12 @@
     "babel-preset-react": "^6.24.1",
     "express": "^4.16.2",
     "jquery": "^3.2.1",
+    "mysql2": "^1.5.1",
     "nodejs": "0.0.0",
     "react": "^16.1.0",
     "react-dom": "^16.1.0",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "sequelize": "^4.28.6"
   },
   "devDependencies": {
     "webpack": "^3.10.0"

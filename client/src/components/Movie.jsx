@@ -8,7 +8,7 @@ class Movie extends React.Component {
 
 
   handleClick() {
-    this.props.handleMovieClick(this.props.index, this.props.id);
+    this.props.handleMovieClick(this.props.index, this.props.id, this.props.watched);
   }
 
   render() {

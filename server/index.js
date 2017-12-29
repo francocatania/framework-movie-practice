@@ -3,23 +3,19 @@ const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
 const getFromTMDB = require('../lib/movieAPI.js');
+const sequelize = require('../database/index.js');
+const Movie = require('../database/index.js');
+
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../client/dist')));
 app.listen(3000, function () { console.log('MovieList app listening on port 3000!') });
 
 
-var movies = [
-  {id: 0, title: 'Mean Girls', watched: true},
-  {id: 1, title: 'Hackers', watched: false},
-  {id: 2, title: 'The Grey', watched: false},
-  {id: 3, title: 'Sunshine', watched: false},
-  {id: 4, title: 'Ex Machina', watched: true},
-];
-
-
 app.get('/movies', (req, res) => {
-  res.send(movies);
+  Movie.findAll().then(movies => {
+    res.send(movies);
+  })
 });
 
 
@@ -35,9 +31,19 @@ app.post('/movie', (req, res) => {
         console.log('NO ESTA NABO', err);
         res.send(502);
       } else {
-        movies.push(JSON.parse(movie));
-        console.log(movies);
-        res.send(movies);
+        let resMovie = JSON.parse(movie);
+        Movie.create({
+          id: resMovie.id,
+          title: resMovie.title,
+          description: resMovie.description,
+          img: resMovie.img,
+          // duration: '',  // no viene en el Search query de la API, hay que hacer un query mas complejo.
+          watched: false,
+        }).then(() => {
+          Movie.findAll().then(movies => {
+            res.send(movies);
+          })
+        });
       }
     });
   });
@@ -49,14 +55,21 @@ app.put('/toggleWatched', (req, res) => {
   req.on('data', (chunk) => {
     body += chunk;
   }).on('end', () => {
-    let movieId = JSON.parse(body).id;
-    for (var i = 0; i < movies.length; i++) {
-      if(movies[i].id === movieId) {
-        movies[i].watched = !movies[i].watched; 
+    let movie = JSON.parse(body);
+    // for (var i = 0; i < movies.length; i++) {
+    //   if(movies[i].id === movieId) {
+    //     movies[i].watched = !movies[i].watched; 
+    //   }
+    // }
+    Movie.update({
+      watched: !movie.watchedCurrentState
+    }, {
+      where: {
+        id: movie.id
       }
-    }
+    })
+
     res.send('Successful Put')
   })
 })
-
 

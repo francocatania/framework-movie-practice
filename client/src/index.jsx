@@ -90,12 +90,13 @@ class MovieList extends React.Component {
   }
 
 
-  handleMovieClick(index, id) {
+  handleMovieClick(index, id, watched) {
     this.state.displayingMovies[index].watched = !this.state.displayingMovies[index].watched
 
     let dataObj = {
       id: id,
       index: index,
+      watchedCurrentState: watched,
     }
 
     $.ajax({
